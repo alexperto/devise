@@ -29,12 +29,16 @@ class Devise::PasswordsController < ApplicationController
 
   # PUT /resource/password
   def update
+    Rails.logger.info ">>>> UPDATING PASSWORD from forked repo"
     self.resource = resource_class.reset_password_by_token(params[resource_name])
-
-    if resource.errors.empty?
+    if resource.errors.messages[:password].blank? && resource.errors.messages[:reset_password_token].blank?
+      resource.errors.clear
+      Rails.logger.info ">>>> resource: #{resource.inspect}"
       flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
       set_flash_message(:notice, flash_message) if is_navigational_format?
       sign_in(resource_name, resource)
+
+
       respond_with resource, :location => redirect_location(resource_name, resource)
     else
       respond_with_navigational(resource){ render_with_scope :edit }
