@@ -27,7 +27,7 @@ class Devise::PasswordsController < DeviseController
 
   # PUT /resource/password
   def updates
-    Rails.logger.info ">>>> UPDATING password"
+    Rails.logger.info ">>>> UPDATING password - master"
     self.resource = resource_class.reset_password_by_token(resource_params)
 
     if resource.errors.empty?
