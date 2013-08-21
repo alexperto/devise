@@ -76,6 +76,9 @@ module Devise
       #   reset_password_period_valid?   # will always return false
       #
       def reset_password_period_valid?
+        Rails.logger.info ">>>> reset_password_period_valid?: #{reset_password_sent_at}"
+        Rails.logger.info ">>>> reset_password_sent_at.utc: #{reset_password_sent_at.utc}"
+        Rails.logger.info ">>>> reset_password_within: #{self.class.reset_password_within.ago}"
         reset_password_sent_at && reset_password_sent_at.utc >= self.class.reset_password_within.ago
       end
 
@@ -112,6 +115,7 @@ module Devise
         # containing an error in reset_password_token attribute.
         # Attributes must contain reset_password_token, password and confirmation
         def reset_password_by_token(attributes={})
+          Rails.logger.info ">>> RESET PASSWORD BY TOKEN"
           original_token       = attributes[:reset_password_token]
           reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
 
@@ -121,6 +125,8 @@ module Devise
           end
 
           if recoverable.persisted?
+            Rails.logger.info ">>> persisted"
+
             if recoverable.reset_password_period_valid?
               recoverable.reset_password!(attributes[:password], attributes[:password_confirmation])
             else
