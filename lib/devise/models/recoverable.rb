@@ -34,7 +34,7 @@ module Devise
           after_password_reset
         end
 
-        save
+        save( :validate => false )
       end
 
       # Resets reset password token and send reset password instructions by email
@@ -65,7 +65,6 @@ module Devise
       #
       def reset_password_period_valid?
         Rails.logger.info ">>>> reset_password_period_valid?: #{reset_password_sent_at}"
-        Rails.logger.info ">>>> reset_password_sent_at.utc: #{reset_password_sent_at.utc}"
         Rails.logger.info ">>>> reset_password_within: #{self.class.reset_password_within.ago}"
         return true unless respond_to?(:reset_password_sent_at)
         reset_password_sent_at && reset_password_sent_at.utc >= self.class.reset_password_within.ago
@@ -124,8 +123,6 @@ module Devise
           recoverable = find_or_initialize_with_error_by(:reset_password_token, attributes[:reset_password_token])
           Rails.logger.info ">>> RESET PASSWORD BY TOKEN - attributes: #{attributes.inspect}"
           if recoverable.persisted?
-            Rails.logger.info ">>> persisted"
-
             if recoverable.reset_password_period_valid?
               recoverable.reset_password!(attributes[:password], attributes[:password_confirmation])
             else
