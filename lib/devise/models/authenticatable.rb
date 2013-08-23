@@ -249,6 +249,8 @@ module Devise
 
         # Find an initialize a record setting an error if it can't be found.
         def find_or_initialize_with_error_by(attribute, value, error=:invalid) #:nodoc:
+          Rails.logger.info "attribute: #{attribute.inspect}"
+          Rails.logger.info "value: #{value}"
           find_or_initialize_with_errors([attribute], { attribute => value }, error)
         end
 
@@ -267,6 +269,7 @@ module Devise
             required_attributes.each do |key|
               value = attributes[key]
               record.send("#{key}=", value)
+              Rails.logger.info "key: #{key}"
               record.errors.add(key, value.present? ? error : :blank)
             end
           end
