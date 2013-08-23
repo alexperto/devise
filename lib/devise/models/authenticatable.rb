@@ -120,6 +120,7 @@ module Devise
 
         # Find an initialize a record setting an error if it can't be found.
         def find_or_initialize_with_error_by(attribute, value, error=:invalid) #:nodoc:
+          Rails.logger.info ">>> attribute: #{attribute}, value: #{value}"
           find_or_initialize_with_errors([attribute], { attribute => value }, error)
         end
 
@@ -141,6 +142,7 @@ module Devise
             required_attributes.each do |key|
               value = attributes[key]
               record.send("#{key}=", value)
+              Rails.logger.info ">>> key: #{key}"
               record.errors.add(key, value.present? ? error : :blank)
             end
           end
@@ -156,7 +158,7 @@ module Devise
             conditions[k] = v.to_s if auth_param_requires_string_conversion?(v)
           end if conditions.is_a?(Hash)
         end
-        
+
         # Determine which values should be transformed to string or passed as-is to the query builder underneath
         def auth_param_requires_string_conversion?(value)
           true unless value.is_a?(TrueClass) || value.is_a?(FalseClass) || value.is_a?(Fixnum)
