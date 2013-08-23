@@ -32,7 +32,7 @@ class Devise::PasswordsController < ApplicationController
     Rails.logger.info ">>>> UPDATING password no errors "
     self.resource = resource_class.reset_password_by_token(params[resource_name])
     Rails.logger.info "resource.errors: #{resource.errors.inspect}"
-    if resource.errors.messages[:password].empty?
+    if resource.errors.messages[:password].blank?
       flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
       set_flash_message(:notice, flash_message) if is_navigational_format?
       sign_in(resource_name, resource)
