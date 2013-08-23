@@ -29,9 +29,9 @@ class Devise::PasswordsController < ApplicationController
 
   # PUT /resource/password
   def update
-    Rails.logger.info ">>>> UPDATING password v1.4"
+    Rails.logger.info ">>>> UPDATING password without_validations"
     self.resource = resource_class.reset_password_by_token(params[resource_name])
-
+    Rails.logger.info "resource.errors: #{resource.errors.inspect}"
     if resource.errors.empty?
       flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
       set_flash_message(:notice, flash_message) if is_navigational_format?

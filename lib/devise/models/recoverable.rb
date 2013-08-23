@@ -30,11 +30,15 @@ module Devise
         self.password = new_password
         self.password_confirmation = new_password_confirmation
         if valid?
+          Rails.logger.info "is valid"
           clear_reset_password_token
           after_password_reset
         end
 
-        save( :validate => false )
+        rs = save( :validate => false )
+        Rails.logger.info ">>> save: #{rs}"
+        Rails.logger.info ">>> errors: #{rs.errors.inspect}"
+        rs
       end
 
       # Resets reset password token and send reset password instructions by email
