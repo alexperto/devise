@@ -122,7 +122,6 @@ module Devise
         # Attributes must contain reset_password_token, password and confirmation
         def reset_password_by_token(attributes={})
           recoverable = find_or_initialize_with_error_by(:reset_password_token, attributes[:reset_password_token])
-          Rails.logger.info ">>> RESET PASSWORD BY TOKEN - attributes: #{attributes.inspect}"
           if recoverable.persisted?
             if recoverable.reset_password_period_valid?
               recoverable.reset_password!(attributes[:password], attributes[:password_confirmation])
