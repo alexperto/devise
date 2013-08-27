@@ -29,16 +29,17 @@ class Devise::PasswordsController < ApplicationController
 
   # PUT /resource/password
   def update
-    Rails.logger.info ">>>> UPDATING PASSWORD"
+    Rails.logger.info ">>>> UPDATING PASSWORD withoun sign_in"
     self.resource = resource_class.reset_password_by_token(params[resource_name])
     if resource.errors.messages[:password].blank?
       Rails.logger.info "No password errors"
-      #resource.errors.clear
-      flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
-      set_flash_message(:notice, flash_message) if is_navigational_format?
-      sign_in(resource_name, resource)
+      resource.errors.clear
       Rails.logger.info ">>>> resource_name: #{resource_name.inspect}"
       Rails.logger.info ">>>> resource: #{resource.inspect}"
+      flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
+      set_flash_message(:notice, flash_message) if is_navigational_format?
+      #sign_in(resource_name, resource)
+
 
       respond_with resource, :location => redirect_location(resource_name, resource)
     else
