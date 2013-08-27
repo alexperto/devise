@@ -30,7 +30,7 @@ module Devise
         self.password = new_password
         self.password_confirmation = new_password_confirmation
         if valid?
-          clear_reset_password_token
+          #clear_reset_password_token
           after_password_reset
         end
         if password == password_confirmation
