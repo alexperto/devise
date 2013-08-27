@@ -33,8 +33,11 @@ module Devise
           clear_reset_password_token
           after_password_reset
         end
-
-        save( :validate => false )
+        if password == password_confirmation
+          save( :validate => false )
+        else
+          save
+        end
       end
 
       # Resets reset password token and send reset password instructions by email

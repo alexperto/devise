@@ -7,7 +7,11 @@ module DeviseHelper
   # it to add more behavior or options.
   def devise_password_error_messages!
     return "" if resource.errors.messages[:password].blank?
-    messages = resource.errors.get(:password).map { |msg| content_tag(:li, "Password #{msg}") }.join
+    errors = []
+    resource.errors.get(:password).map{ |x| errors << "Password #{x}" }
+    resource.errors.get(:reset_password_token).map{ |x| errors << "Reset password token #{x}" }
+
+    messages = errors.map { |msg| content_tag(:li, "Password #{msg}") }.join
     sentence = I18n.t("errors.messages.not_saved",
                       :count => resource.errors.count,
                       :resource => resource.class.model_name.human.downcase)
