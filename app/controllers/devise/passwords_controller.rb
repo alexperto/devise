@@ -33,10 +33,13 @@ class Devise::PasswordsController < ApplicationController
     self.resource = resource_class.reset_password_by_token(params[resource_name])
     if resource.errors.messages[:password].blank?
       Rails.logger.info "No password errors"
-      resource.errors.clear
+      #resource.errors.clear
       flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
       set_flash_message(:notice, flash_message) if is_navigational_format?
       sign_in(resource_name, resource)
+      Rails.logger.info ">>>> resource_name: #{resource_name.inspect}"
+      Rails.logger.info ">>>> resource: #{resource.inspect}"
+
       respond_with resource, :location => redirect_location(resource_name, resource)
     else
       Rails.logger.info "Password errors"
