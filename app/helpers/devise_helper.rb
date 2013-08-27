@@ -10,8 +10,8 @@ module DeviseHelper
     errors = []
     resource.errors.get(:password).map{ |x| errors << "Password #{x}" }
     resource.errors.get(:reset_password_token).map{ |x| errors << "Reset password token #{x}" }
-
-    messages = errors.map { |msg| content_tag(:li, "Password #{msg}") }.join
+    Rails.logger.info "errors: #{errors.inspect}"
+    messages = errors.map { |msg| content_tag(:li, msg) }.join
     sentence = I18n.t("errors.messages.not_saved",
                       :count => resource.errors.count,
                       :resource => resource.class.model_name.human.downcase)
